@@ -1,0 +1,95 @@
+{
+	"name": "Notebook 1",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "sparkpool",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "91e19708-0f99-4323-aa49-44f722bdc066"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/2f56588b-dca3-4832-8526-fec109059406/resourceGroups/ecomerce_analytics/providers/Microsoft.Synapse/workspaces/ecomerce-analytics-dev/bigDataPools/sparkpool",
+				"name": "sparkpool",
+				"type": "Spark",
+				"endpoint": "https://ecomerce-analytics-dev.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/sparkpool",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.5",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"collapsed": false
+				},
+				"source": [
+					"from pyspark.sql.functions import *\n",
+					"from pyspark.sql.types import *\n",
+					"\n",
+					"customers_df = spark.read.format(\"csv\") \\\n",
+					"    .option(\"header\", \"true\") \\\n",
+					"    .option(\"inferSchema\", \"true\") \\\n",
+					"    .load(\"abfss://retail-data@ecomdefstorage.dfs.core.windows.net/customers/*\")\n",
+					"\n",
+					"display(customers_df)"
+				],
+				"execution_count": 18
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"collapsed": false
+				},
+				"source": [
+					"bronze_df = customers_df \\\n",
+					"    .withColumn(\"file_path\", input_file_name()) \\\n",
+					"    .withColumn(\"last_updated_ts\", current_timestamp())\n",
+					"\n",
+					"display(bronze_df)"
+				],
+				"execution_count": 19
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"bronze_df.write \\\n",
+					"    .format(\"delta\") \\\n",
+					"    .mode(\"overwrite\") \\\n",
+					"    .save(\"abfss://bronze@ecomdefstorage .dfs.core.windows.net/customers/\")"
+				],
+				"execution_count": 20
+			}
+		]
+	}
+}

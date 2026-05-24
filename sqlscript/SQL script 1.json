@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 1",
+	"properties": {
+		"content": {
+			"query": "CREATE EXTERNAL DATA SOURCE bronze_source\nWITH (\n   LOCATION = 'https://ecomdevstorage.blob.core.windows.net/bronze/' \n)\n\nCREATE EXTERNAL FILE FORMAT DeltaFormat\nWITH(\n    FORMAT_TYPE = DELTA\n)\n\nCREATE EXTERNAL TABLE dbo.customers\n(\n    customer_id       INT NULL,\n    tax_id            FLOAT NULL,\n    tax_code          NVARCHAR(50) NULL,\n    customer_name     NVARCHAR(200) NULL,\n    state             NVARCHAR(100) NULL,\n    city              NVARCHAR(100) NULL,\n    postcode          NVARCHAR(20) NULL,\n    street            NVARCHAR(200) NULL,\n    number            NVARCHAR(20) NULL,\n    unit              NVARCHAR(50) NULL,\n    region            NVARCHAR(100) NULL,\n    district          NVARCHAR(100) NULL,\n    lon               FLOAT NULL,\n    lat               FLOAT NULL,\n    ship_to_address   NVARCHAR(300) NULL,\n    valid_from        INT NULL,\n    valid_to          FLOAT NULL,\n    units_purchased   INT NULL,\n    loyalty_segment   INT NULL,\n    file_path         NVARCHAR(500) NULL,\n    last_updated_ts   DATETIME NULL\n)\nWITH (\n    LOCATION = 'customers/',\n    DATA_SOURCE = bronze_source,\n    FILE_FORMAT = DeltaFormat\n)",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "bronze_db",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

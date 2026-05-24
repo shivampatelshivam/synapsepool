@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "91e19708-0f99-4323-aa49-44f722bdc066"
+				"spark.autotune.trackingId": "0b71db01-10f1-4b21-bb4f-b15f8b9ee0d8"
 			}
 		},
 		"metadata": {
@@ -64,7 +64,7 @@
 					"\n",
 					"display(customers_df)"
 				],
-				"execution_count": 18
+				"execution_count": 23
 			},
 			{
 				"cell_type": "code",
@@ -78,7 +78,7 @@
 					"\n",
 					"display(bronze_df)"
 				],
-				"execution_count": 19
+				"execution_count": 24
 			},
 			{
 				"cell_type": "code",
@@ -86,9 +86,9 @@
 					"bronze_df.write \\\n",
 					"    .format(\"delta\") \\\n",
 					"    .mode(\"overwrite\") \\\n",
-					"    .save(\"abfss://bronze@ecomdefstorage .dfs.core.windows.net/customers/\")"
+					"    .save(\"abfss://bronze@ecomdefstorage.dfs.core.windows.net/customers/\")"
 				],
-				"execution_count": 20
+				"execution_count": 26
 			}
 		]
 	}
